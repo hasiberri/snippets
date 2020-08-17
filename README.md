@@ -1,1 +1,2 @@
-# snippets
+# Lainotik Snippets
+This repo contains snippeds adn the documentation related to the use of the Lainotik Bigdata SAAS platform. Its goal is to provide all the information required to make an efficient use of the Lainotik Bigdata platform.

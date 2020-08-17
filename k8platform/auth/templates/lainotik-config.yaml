@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Config
+preferences: {}
+clusters:
+- name: {platform}
+  cluster:
+    certificate-authority: {currentpath}/certs/ca.crt
+    server: https://{ip}:8443
+contexts:
+- name: {user}-{platform}
+  context:
+    cluster: {platform}
+    user: {user}
+current-context:
+users:
+- name: {user}
+  user:
+    client-certificate: {currentpath}/certs/client.crt
+    client-key: {currentpath}/certs/client.key
