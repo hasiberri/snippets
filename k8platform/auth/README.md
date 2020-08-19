@@ -18,11 +18,13 @@ When a k8 cluster is setup by the k8 cluster administrator, this includes intern
 
 In order for a third party to get access, the three elements mentioned above are required, which will be used for the third party to create a kubeconfig. Once created, the access for the third party to the K8 cluster will be available with the proper authentication and authorization. Therefore, here two actors have their play, the k8 cluster administrator (responsible for the K8 cluster) and the third party that requires access to the k8 cluster (Lainotik platform for example).
 
-This document will provide a full description of how to setup authentication and authorization based on private key/certificates for a third party by the k8 cluster administrator.  For this, it will be considered the user name as "lainoadmin", and the name of the k8 cluster as "mykube". To facilitate the description a set of yaml templates and shell scripts are provided:
+This document will provide a full description of how to setup authentication and authorization based on private key/certificates for a third party by the k8 cluster administrator.  For this, it will be considered the user name as "lainoadmin", and the name of the k8 cluster as "mykube". To facilitate the description a set of yaml templates are provided:
 
 * templates/lainotik-cr.yaml
 * templates/lainotik-crb.yaml
 * templates/lainotik-csr.yaml
+
+Additionally serveral shell scripts have been created to faciliate the work:
 
 * clientkeycsr-build.sh
 * clientcacrt-build.sh
@@ -50,7 +52,7 @@ The common Name (CN) and organization (O) parameters are very important. As will
 
 To facilitate these step, the following shell script can be applied to generate the client private hey and the CSR:
 
-    $ client-csr-build.sh lainoadmin mykube
+    $ ./client-csr-build.sh lainoadmin mykube
 
 ## Obtaining the signed certificates (K8 Cluster Administrator)
 
@@ -61,7 +63,7 @@ The CSR needs to be signed through the cluster CA in order to obtain the client 
 
 The k8 cluster administrator should be applying the lainotik-csr.yaml template to create the CertificateSigningRequest object in the k8 cluster, in which the base64 output of the CSR must be included under the requests field. Therefore, as the first step, the third party must provide the CSR to the infra team (not the private key), who them will insert within the lainotik.yaml the CSR as follows:
 
-    $ cat client.csr | base64 | tr -d '\n'
+    $ cat certs/client.csr | base64 | tr -d '\n'
     copy the output within lainotik-csr.yaml request field
     $ kubectl apply -f lainotik-csr.yaml
     $ kubectl get csr # To check
@@ -127,11 +129,12 @@ Finally just test that the authorization/authentication has been set properly:
 
 Then any Kubectl command can be tried, like this ones:
 
+    $ kubectl get namespaces --kubeconfig=manifests/lainotik-config.yaml
     $ kubectl get pods --kubeconfig=manifests/lainotik-config.yaml
     $ kubectl get services --kubeconfig=manifests/lainotik-config.yaml
     $ ...
 
-It might happen that the commands do not work. Note that this would be more than likely be due to the RBAC authorization settings for the clusterRole. Modify the clusterRole options in lainotik-crb.yaml as needed to make the kubectl commands work. Note that the right authorization, as limited as posible, must be set for the specific clusterRole in order to enforce security.
+It might happen that the commands do not work because the action is forbidden. Note that this is due to the RBAC authorization settings for the clusterRole. Modify the clusterRole options in lainotik-crb.yaml as needed to make the kubectl commands work. Note that the right authorization, as limited as posible, must be set for the specific clusterRole in order to enforce security.
 
 To facilitate the understanding, all the process to create a kubeconfig as been defined in a shell script (the ip is a ficticious one representing the k8 cluster ip):
 

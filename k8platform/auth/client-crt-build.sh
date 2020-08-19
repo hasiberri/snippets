@@ -32,7 +32,6 @@ sed -i "s/{user}/$1/g" $lainotikcrpath
 kubectl delete clusterRole lainotik-$1-clusterRole
 kubectl apply -f $lainotikcrpath
 
-
 # create lainotik cluster role binding with the user and cluster role input parameter
 lainotikcrbpath='manifests/lainotik-crb.yaml'
 lainotikcrbtemppath='templates/lainotik-crb.yaml'
@@ -40,14 +39,6 @@ cp $lainotikcrbtemppath $lainotikcrbpath
 sed -i "s/{user}/$1/g" $lainotikcrbpath
 kubectl delete clusterRoleBinding lainotik-$1-clusterRoleBinding
 kubectl apply -f $lainotikcrbpath
-
-# create lainotik role binding (no cluster binding) with the user and cluster role input parameter
-lainotikrbpath='manifests/lainotik-rb.yaml'
-lainotikrbtemppath='templates/lainotik-rb.yaml'
-cp $lainotikrbtemppath $lainotikrbpath
-sed -i "s/{user}/$1/g" $lainotikrbpath
-kubectl delete roleBinding lainotik-$1-roleBinding
-kubectl apply -f $lainotikrbpath
 
 # Get certificates
 kubectl get csr lainotik-$1-csr -o jsonpath='{.status.certificate}' | base64 --decode > certs/client.crt

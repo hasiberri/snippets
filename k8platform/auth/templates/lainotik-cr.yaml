@@ -4,5 +4,5 @@ metadata:
   name: lainotik-{user}-clusterRole
 rules:
 - apiGroups: [""] # "" indicates the core API group
-  resources: ["pods", "events", "persistentvolumeclaims"]
-  verbs: ["get", "watch", "list", "create", "delete"]
+  resources: ["namespaces"]
+  verbs: ["get", "list", "create"]
