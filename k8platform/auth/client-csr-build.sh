@@ -10,4 +10,4 @@ fi
 if [ -d certs ]; then rm -Rf certs; fi
 mkdir -p certs
 
-openssl req -new -newkey rsa:4096 -nodes -keyout certs/client.key -out certs/client.csr -subj "/CN=$1 /O=$1-$2"
+openssl req -new -newkey rsa:4096 -nodes -keyout certs/client.key -out certs/client.csr -subj "/CN=$1/O=$1-$2"
