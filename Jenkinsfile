@@ -6,13 +6,13 @@ pipeline {
             environment {
                 container = "example1"
             }
-            when { changeset "${container}/*"}
+            when { changeset "example1/*"}
             steps {
                 sh 'echo "This is ${container}"'
                 dir("${container}/"){
                     script{
                         try{
-                          dockerImage = docker.build("example1")
+                          dockerImage = docker.build("${container}")
                         } catch(e) {
                             echo e.toString()  
                         }
