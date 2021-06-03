@@ -6,7 +6,7 @@ pipeline {
             environment {
                 container = "example1"
             }
-            when { changeset "example1/*"}
+            when { changeset "${container}/*"}
             steps {
                 sh 'echo "This is ${container}"'
                 dir("${container}/"){
