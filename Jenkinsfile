@@ -1,16 +1,21 @@
 pipeline {
     agent any
+
+    def build_ok = true
+
     stages {
+        def container = "example1"
         stage('BuildPush example1') {
-            when { changeset "example1/*"}
+            when { changeset "$container/*"}
             steps {
-                sh 'echo "This is example1"'
-                dir('example1/'){
+                sh 'echo "This is $container"'
+                dir("$container/"){
                     script{
                         try{
-                          dockerImage = docker.build("example1")
+                          dockerImage = docker.build("$container")
                         } catch(e) {
-                          echo e.toString()  
+                            build_ok = false
+                            echo e.toString()  
                         }
                     }
                 }
@@ -26,17 +31,20 @@ pipeline {
                         try{
                           dockerImage = docker.build("example2")
                         } catch(e) {
-                          echo e.toString()  
+                            build_ok = false
+                            echo e.toString()  
                         }
                     }
                 }
             }
         }
 
-        stage('Build2') {
-            steps {
-                sh 'echo "This is the next stage"'
-            }
+        if(build_ok) {
+            sh 'echo "ALL container builds correct"'
+        } else {
+            sh 'echo "Container builds FAILURES"'
+            sh 'exit 1'   // failure
         }
     }
 }
+
