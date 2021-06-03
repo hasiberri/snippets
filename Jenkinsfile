@@ -7,7 +7,7 @@ pipeline {
                 sh 'echo "This is example1 in $GIT_BRANCH"'
             }
         }
-        stage('BuildPush example2') {
+        stage('BuildPush example2 in $GIT_BRANCH') {
             when { changeset "example2/*"}
             steps {
                 sh 'echo "This is example2 in $GIT_BRANCH"'
