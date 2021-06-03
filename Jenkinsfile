@@ -5,14 +5,22 @@ pipeline {
             when { changeset "example1/*"}
             steps {
                 sh 'echo "This is example1"'
-                docker.build("example2", "-f example1/dockerfile .")
+                dir('example1/'){
+                    script{
+                        dockerImage = docker.build("example1")
+                    }
+                }
             }
         }
         stage('BuildPush example2') {
             when { changeset "example2/*"}
             steps {
                 sh 'echo "This is example2"'
-                docker.build("example2", "-f example2/dockerfile .")
+                dir('example2/'){
+                    script{
+                        dockerImage = docker.build("example2")
+                    }
+                }
             }
         }
         stage('Build2') {
