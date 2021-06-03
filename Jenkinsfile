@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-        stage('BuildPush example1') {
+        stage('BuildPush example1 in $GIT_BRANCH') {
             when { changeset "example1/*"}
             steps {
                 sh 'echo "This is example1 in $GIT_BRANCH"'
