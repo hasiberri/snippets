@@ -1,5 +1,3 @@
-def build_ok = true
-
 pipeline {
     agent any
 
@@ -16,7 +14,6 @@ pipeline {
                         try{
                           dockerImage = docker.build("${container}")
                         } catch(e) {
-                            build_ok = false
                             echo e.toString()  
                         }
                     }
@@ -33,7 +30,6 @@ pipeline {
                         try{
                           dockerImage = docker.build("example2")
                         } catch(e) {
-                            build_ok = false
                             echo e.toString()  
                         }
                     }
@@ -42,5 +38,4 @@ pipeline {
         }
     }
 }
-
 
