@@ -1,6 +1,7 @@
 pipeline {
     agent any
     stages {
+      try{
         stage('BuildPush example1') {
             when { changeset "example1/*"}
             steps {
@@ -12,6 +13,11 @@ pipeline {
                 }
             }
         }
+      } catch(e) {
+        echo e.toString()  
+      }
+
+      try{
         stage('BuildPush example2') {
             when { changeset "example2/*"}
             steps {
@@ -23,11 +29,16 @@ pipeline {
                 }
             }
         }
-        stage('Build2') {
-            steps {
-                sh 'echo "This is the next stage"'
-            }
-        }
+      } catch(e) {
+        echo e.toString()  
+      }
+
+      stage('Build2') {
+          steps {
+              sh 'echo "This is the next stage"'
+          }
+      }
+
     }
 }
 
