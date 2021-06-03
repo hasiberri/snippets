@@ -9,7 +9,7 @@ pipeline {
             when { changeset "example1/*"}
             steps {
                 sh 'echo "This is ${container}"'
-                dir("example1/"){
+                dir("${container}/"){
                     script{
                         try{
                           dockerImage = docker.build("example1")
