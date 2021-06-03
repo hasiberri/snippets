@@ -4,8 +4,8 @@ pipeline {
     def build_ok = true
 
     stages {
-        def container = "example1"
         stage('BuildPush example1') {
+            def container = "example1"
             when { changeset "$container/*"}
             steps {
                 sh 'echo "This is $container"'
@@ -47,4 +47,3 @@ pipeline {
         }
     }
 }
-
