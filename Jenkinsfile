@@ -10,7 +10,7 @@ pipeline {
         stage('BuildPush example2') {
             when { changeset "example2/*"}
             steps {
-                sh 'echo "This is example2 in " + env.BRANCH_NAME"'
+                sh 'echo "This is example2 in " + env.BRANCH_NAME'
             }
         }
         stage('Build2') {
