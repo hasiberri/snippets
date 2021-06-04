@@ -15,7 +15,7 @@ def call(image) {
                 dir("example1/"){
                     script{
                         try{
-                          dockerImage = docker.build("${image1}")
+                          dockerImage = docker.build("${image}")
                         } catch(e) {
                             echo e.toString()  
                         }
