@@ -1,5 +1,5 @@
 // microservicesDocker.groovy
-def call(def image) {
+def call(image) {
 
   pipeline {
     agent any
