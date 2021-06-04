@@ -13,7 +13,9 @@ def call(image) {
             steps {
                 sh 'echo "This is ${image}"'
                 dir("${image}/"){
-                   dockerImage = docker.build("${image}")
+                   script {
+                      dockerImage = docker.build("${image}")
+                   }
                 }
             }
         }
