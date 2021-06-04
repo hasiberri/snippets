@@ -1,5 +1,5 @@
 // microservicesDocker.groovy
-def call(Map pipelineParams) {
+def call(def image) {
 
   pipeline {
     agent any
@@ -11,7 +11,7 @@ def call(Map pipelineParams) {
         stage('Build Image') {
             when { changeset "example1/*"}
             steps {
-                sh 'echo "This is ${pipelineParams.image}"'
+                sh 'echo "This is ${image}"'
                 dir("example1/"){
                     script{
                         try{

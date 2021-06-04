@@ -1,4 +1,4 @@
 @Library('microservicesDocker') _
 
-microservicesDocker(image: 'example1')
+microservicesDocker('example1')
 
