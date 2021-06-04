@@ -12,7 +12,7 @@ def call(image) {
             when { changeset "${image}/*"}
             steps {
                 sh 'echo "This is ${image}"'
-                dir("example1/"){
+                dir("${image}/"){
                     script{
                         try{
                           dockerImage = docker.build("${image}")
