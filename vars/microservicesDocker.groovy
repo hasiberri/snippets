@@ -3,9 +3,6 @@ def call(image) {
 
   pipeline {
     agent any
-    environment {
-        image1 = 'example1'
-    }
 
     stages {
         stage('Build Image') {
@@ -15,6 +12,7 @@ def call(image) {
                 dir("${image}/"){
                    script {
                       dockerImage = docker.build("${image}")
+                      sh 'echo "This is ${image}"'
                    }
                 }
             }
