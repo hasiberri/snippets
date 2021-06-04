@@ -6,13 +6,13 @@ def call(Map pipelineParams) {
 
     stages {
         stage('Build Image') {
-            when { changeset "example1/*"}
+            when { changeset "${pipelineParams.image}/*"}
             steps {
-                sh 'echo "This is pipelineParams.image"'
+                sh 'echo "This is ${pipelineParams.image}"'
                 dir("pipelineParams.image/"){
                     script{
                         try{
-                          dockerImage = docker.build("pipelineParams.image")
+                          dockerImage = docker.build("${pipelineParams.image}")
                         } catch(e) {
                             echo e.toString()  
                         }
