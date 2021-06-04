@@ -11,7 +11,7 @@ def call(Map pipelineParams) {
         stage('Build Image') {
             when { changeset "example1/*"}
             steps {
-                sh 'echo "This is ${image1}"'
+                sh 'echo "This is ${pipelineParams.image}"'
                 dir("example1/"){
                     script{
                         try{
