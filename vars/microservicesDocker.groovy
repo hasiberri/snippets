@@ -6,7 +6,7 @@ def call(Map pipelineParams) {
 
     stages {
         stage('Build Image') {
-            when { changeset "${pipelineParams.image}/*"}
+            when { changeset "example1/*"}
             steps {
                 sh 'echo "This is ${pipelineParams.image}"'
                 dir("pipelineParams.image/"){
