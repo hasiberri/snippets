@@ -9,7 +9,7 @@ def call(image) {
 
     stages {
         stage('Build Image') {
-            when { changeset "example1/*"}
+            when { changeset "${image}/*"}
             steps {
                 sh 'echo "This is ${image}"'
                 dir("example1/"){
