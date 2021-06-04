@@ -13,13 +13,7 @@ def call(image) {
             steps {
                 sh 'echo "This is ${image}"'
                 dir("${image}/"){
-                    script{
-                        try{
-                          dockerImage = docker.build("${image}")
-                        } catch(e) {
-                            echo e.toString()  
-                        }
-                    }
+                   dockerImage = docker.build("${image}")
                 }
             }
         }
