@@ -9,7 +9,7 @@ def call(image) {
             when { changeset "${image}/*"}
             steps {
 		dir("${image}/"){
-			withPythonEnv('python3') {
+			withPythonEnv('Python3') {
         			sh 'pip install pytest'
         			sh 'pytest'
     			}
