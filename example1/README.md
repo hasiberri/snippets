@@ -1,1 +1,1 @@
-# This is an example of staging
+# This is an example of staging full
