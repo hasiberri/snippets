@@ -41,9 +41,11 @@ def call(image) {
         }
         stage('Push Image') {
             when { changeset "${image}/**"}
-            steps {
-                dir("${image}/"){
-                   sh 'echo "pushing"'
+	    container('python'){
+            	steps {
+                	dir("${image}/"){
+                   	sh 'echo "pushing"'
+			}
                 }
             }
         }
