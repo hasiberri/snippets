@@ -6,7 +6,7 @@ def call(image) {
 
     stages {
         stage('Unit Test') {
-            when { changeset "${image}/*"}
+            when { changeset "${image}/**"}
             steps {
 		dir("${image}/"){
         		sh 'pip install pytest'
