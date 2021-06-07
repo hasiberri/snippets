@@ -2,7 +2,7 @@
 from myCheck import *
 from yourCheck import *
 
-print ("INFO: Running app")
+print ("INFO: Running app again")
 
 
 platform = { 'a': 1, 'b': 2 }
