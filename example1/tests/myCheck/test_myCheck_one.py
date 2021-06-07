@@ -11,3 +11,4 @@ def test_yourCheck_one():
     print ("My check test")
     one, two = myCheck.checkmyPlatform (platform)
     assert one == 1
+    assert two == 2

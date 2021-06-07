@@ -10,7 +10,23 @@ def call(image) {
             steps {
 		dir("${image}/"){
         		sh 'pip install pytest'
-        		sh 'pytest'
+			sh 'mkdir reports'
+        		sh 'pytest --cov=highlevel --junitxml reports/junit.xml --cov-report xml:reports/coverage.xml highlevel'
+            }
+            post {
+                always {
+                    junit 'reports/*.xml'
+                    step([$class: 'CoberturaPublisher',
+                                   autoUpdateHealth: false,
+                                   autoUpdateStability: false,
+                                   coberturaReportFile: 'reports/coverage.xml',
+                                   failNoReports: false,
+                                   failUnhealthy: false,
+                                   failUnstable: false,
+                                   maxNumberOfBuilds: 10,
+                                   onlyStable: false,
+                                   sourceEncoding: 'ASCII',
+                                   zoomCoverageChart: false])
                 }
             }
         }
