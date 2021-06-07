@@ -32,11 +32,9 @@ def call(image) {
         stage('Build Image') {
             when { changeset "${image}/**"}
             steps {
-                sh 'echo "This is ${image}"'
                 dir("${image}/"){
                    script {
                       dockerImage = docker.build("${image}")
-                      sh 'echo "This is ${image}"'
                    }
                 }
             }
@@ -44,10 +42,15 @@ def call(image) {
         stage('Push Image') {
             when { changeset "${image}/**"}
             steps {
-                sh 'echo "This is ${image}"'
                 dir("${image}/"){
                    sh 'echo "pushing"'
                 }
+            }
+        }
+        stage('Delete Image') {
+            when { changeset "${image}/**"}
+            steps {
+                sh 'docker system prune -af --volumes '
             }
         }
     }
