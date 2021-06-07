@@ -5,7 +5,7 @@ def call(image) {
     agent any
 
     stages {
-        stage('Test') {
+        stage('Unit Test') {
             when { changeset "${image}/*"}
             steps {
 		dir("${image}/"){
