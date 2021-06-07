@@ -35,9 +35,9 @@ def call(image) {
             when { changeset "${image}/**"}
             steps {
                 dir("${image}/"){
-                   script {
-                      dockerImage = docker.build("${image}")
-                   }
+                   		script {
+                      			dockerImage = docker.build("${image}")
+                   		}
                 }
             }
         }
@@ -45,9 +45,7 @@ def call(image) {
             when { changeset "${image}/**"}
             steps {
                 dir("${image}/"){
-		container ("python"){
                    	sh 'echo "pushing"'
-		}
 		}      
             }
 
