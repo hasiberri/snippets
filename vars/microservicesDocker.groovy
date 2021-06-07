@@ -5,6 +5,17 @@ def call(image) {
     agent any
 
     stages {
+        stage('Test') {
+            when { changeset "${image}/*"}
+            steps {
+		dir("${image}/"){
+			withPythonEnv('python3') {
+        			sh 'pip install pytest'
+        			sh 'pytest'
+    			}
+                }
+            }
+        }
         stage('Build Image') {
             when { changeset "${image}/*"}
             steps {
@@ -14,6 +25,15 @@ def call(image) {
                       dockerImage = docker.build("${image}")
                       sh 'echo "This is ${image}"'
                    }
+                }
+            }
+        }
+        stage('Push Image') {
+            when { changeset "${image}/*"}
+            steps {
+                sh 'echo "This is ${image}"'
+                dir("${image}/"){
+                   sh 'echo "pushing"'
                 }
             }
         }
