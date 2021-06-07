@@ -2,7 +2,7 @@
 def call(image) {
 
   pipeline {
-    agent any
+    agent python
 
     stages {
         stage('Unit Test') {
