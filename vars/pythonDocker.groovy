@@ -12,6 +12,7 @@ def call(image) {
         		sh 'pip install pytest'
 			sh 'mkdir reports'
         		sh 'pytest --cov=highlevel --junitxml reports/junit.xml --cov-report xml:reports/coverage.xml highlevel'
+		}
             }
             post {
                 always {
