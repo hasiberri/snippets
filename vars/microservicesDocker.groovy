@@ -14,8 +14,23 @@ def call(image) {
                 }
             }
         }
+        stage('Security Test') {
+            when { changeset "${image}/**"}
+            steps {
+		dir("${image}/"){
+        		sh 'pip install bandit'
+        		sh '''bandit -r ./src 2>&1 | tee ./out.log
+				num=`grep "Severity: High" ./out.log | wc -l`
+				if [ $num -eq 0 ]; then
+     					exit 0
+				else
+     					exit 1
+				fi'''
+                }
+            }
+        }
         stage('Build Image') {
-            when { changeset "${image}/*"}
+            when { changeset "${image}/**"}
             steps {
                 sh 'echo "This is ${image}"'
                 dir("${image}/"){
@@ -27,7 +42,7 @@ def call(image) {
             }
         }
         stage('Push Image') {
-            when { changeset "${image}/*"}
+            when { changeset "${image}/**"}
             steps {
                 sh 'echo "This is ${image}"'
                 dir("${image}/"){
