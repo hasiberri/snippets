@@ -25,20 +25,9 @@ spec:
     command:
     - /busybox/cat
     tty: true
-    volumeMounts:
-      - name: jenkins-docker-cfg
-        mountPath: /kaniko/.docker
   volumes:
   - name: sharedvolume
     emptyDir: {}
-  - name: jenkins-docker-cfg
-    projected:
-      sources:
-      - secret:
-          name: regcred
-          items:
-            - key: .dockerconfigjson
-              path: config.json
 """
       }
     }
