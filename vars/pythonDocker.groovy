@@ -66,7 +66,7 @@ spec:
             steps {
                 container('kaniko') {
                   dir("${image}/"){
-			sh '/kaniko/executor -f Dockerfile --context=/ --no-push'
+			sh '/kaniko/executor -f Dockerfile --context=${pwd()} --no-push'
                   }
                 }
             }
