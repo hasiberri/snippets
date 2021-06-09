@@ -1,4 +1,4 @@
-// microservicesDocker.groovy
+// pythonDocker.groovy
 def call(image) {
 
   pipeline {
@@ -22,6 +22,37 @@ spec:
   volumes:
     - name: sharedvolume
       emptyDir: {}
+"""
+      }
+  } 
+
+    agent {
+     kubernetes {
+      label 'mykaniko'
+      defaultContainer 'jnlp'
+      yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:debug
+    imagePullPolicy: Always
+    command:
+    - /busybox/cat
+    tty: true
+    volumeMounts:
+      - name: jenkins-docker-cfg
+        mountPath: /kaniko/.docker
+  volumes:
+  - name: jenkins-docker-cfg
+    projected:
+      sources:
+      - secret:
+          name: regcred
+          items:
+            - key: .dockerconfigjson
+              path: config.json
 """
       }
     }
@@ -58,7 +89,7 @@ spec:
         stage('Build Image') {
             when { changeset "${image}/**"}
             steps {
-                container('mypython') {
+                container('mykaniko') {
                   dir("${image}/"){
                    		script {
                       			dockerImage = docker.build("${image}")
@@ -70,7 +101,7 @@ spec:
         stage('Push Image') {
             when { changeset "${image}/**"}
             steps {
-                container('mypython') {
+                container('mykaniko') {
                   dir("${image}/"){
                    	sh 'echo "pushing"'
                   }
