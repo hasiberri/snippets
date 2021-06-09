@@ -19,21 +19,6 @@ spec:
     volumeMounts:
     - mountPath: '/opt/app/shared'
       name: sharedvolume  
-  volumes:
-    - name: sharedvolume
-      emptyDir: {}
-"""
-      }
-   }
-   agent {
-     kubernetes { 
-      label 'mykaniko'
-      defaultContainer 'jnlp'
-      yaml """
-apiVersion: v1
-kind: Pod
-spec:
-  containers:
   - name: kaniko
     image: gcr.io/kaniko-project/executor:debug
     imagePullPolicy: Always
@@ -44,6 +29,8 @@ spec:
       - name: jenkins-docker-cfg
         mountPath: /kaniko/.docker
   volumes:
+  - name: sharedvolume
+    emptyDir: {}
   - name: jenkins-docker-cfg
     projected:
       sources:
