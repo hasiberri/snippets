@@ -66,7 +66,7 @@ spec:
             steps {
                 container('kaniko') {
                   dir("${image}/"){
-			sh '/kaniko/executor -f Dockerfile'
+			sh '/kaniko/executor -f Dockerfile --no-push'
                   }
                 }
             }
@@ -81,14 +81,6 @@ spec:
 		}      
             }
 
-        }
-        stage('Delete Image') {
-            when { changeset "${image}/**"}
-            steps {
-                container('mypython') {
-                  sh 'docker system prune -af --volumes '
-		} 
-            }
         }
     }
   }
