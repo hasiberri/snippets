@@ -11,7 +11,7 @@ apiVersion: v1
 kind: Pod
 spec:
   containers:
-  - name: mypython
+  - name: python
     image: python:3
     command:
     - cat
@@ -36,7 +36,7 @@ spec:
         stage('Unit Test') {
             when { changeset "${image}/**"}
             steps {
-                container('mypython') {
+                container('python') {
 		  dir("${image}/"){
         		sh 'pip install pytest'
         		sh 'pytest'
@@ -47,7 +47,7 @@ spec:
         stage('Security Test') {
             when { changeset "${image}/**"}
             steps {
-                container('mypython') {
+                container('python') {
 		  dir("${image}/"){
         		sh 'pip install bandit'
         		sh '''bandit -r ./src 2>&1 | tee ./out.log
@@ -64,11 +64,9 @@ spec:
         stage('Build Image') {
             when { changeset "${image}/**"}
             steps {
-                container('mykaniko') {
+                container('kaniko') {
                   dir("${image}/"){
-                   		script {
-                      			dockerImage = docker.build("${image}")
-                   		}
+			sh '/kaniko/executor -f Dockerfile
                   }
                 }
             }
@@ -76,7 +74,7 @@ spec:
         stage('Push Image') {
             when { changeset "${image}/**"}
             steps {
-                container('mykaniko') {
+                container('kaniko') {
                   dir("${image}/"){
                    	sh 'echo "pushing"'
                   }
