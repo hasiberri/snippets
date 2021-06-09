@@ -24,9 +24,6 @@ spec:
       emptyDir: {}
 """
       }
-  } 
-
-    agent {
      kubernetes {
       label 'mykaniko'
       defaultContainer 'jnlp'
