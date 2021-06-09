@@ -3,6 +3,7 @@ def call(image) {
 
   pipeline {
     agent {
+     kubernetes {
       label 'mypython'
       defaultContainer 'jnlp'
       yaml """
@@ -22,6 +23,7 @@ def call(image) {
   		- name: sharedvolume
     		  emptyDir: {}
      """
+      }
     }
 
     stages {
