@@ -7,22 +7,22 @@ def call(image) {
       label 'mypython'
       defaultContainer 'jnlp'
       yaml """
-	apiVersion: v1
-	kind: Pod
-	spec:
-  		containers:
-  		- name: mypython
-    		  image: python:3
-    		  command:
-    		  - cat
-    		  tty: true
-    		  volumeMounts:
-    		  - mountPath: '/opt/app/shared'
-      		    name: sharedvolume  
-                volumes:
-  		- name: sharedvolume
-    		  emptyDir: {}
-     """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: mypython
+    image: python:3
+    command:
+    - cat
+    tty: true
+    volumeMounts:
+    - mountPath: '/opt/app/shared'
+      name: sharedvolume  
+  volumes:
+    - name: sharedvolume
+      emptyDir: {}
+"""
       }
     }
 
