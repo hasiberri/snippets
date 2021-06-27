@@ -1,4 +1,4 @@
-ARG BASE_CONTAINER=python:3.4-alpine
+ARG BASE_CONTAINER=python:3.7-alpine
 FROM $BASE_CONTAINER
 
 LABEL maintainer="lainotik"
