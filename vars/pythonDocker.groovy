@@ -13,6 +13,7 @@ spec:
   containers:
   - name: python
     image: python:3.7-slim-buster
+    imagePullPolicy: IfNotPresent
     command:
     - cat
     tty: true
@@ -22,21 +23,21 @@ spec:
 
   - name: dockle
     image: docker.io/goodwithtech/dockle:v0.3.15
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     command:
     - /busybox/cat
     tty: true 
 
   - name: kaniko
-    image: gcr.io/kaniko-project/executor:1.6.0
-    imagePullPolicy: Always
+    image: gcr.io/kaniko-project/executor:v1.6.0
+    imagePullPolicy: IfNotPresent
     command:
     - /busybox/cat
     tty: true
 
   - name: trivy
     image: docker.io/aquasec/trivy:0.18.3
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     command:
     - /busybox/cat
     tty: true
