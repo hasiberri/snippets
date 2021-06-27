@@ -64,7 +64,7 @@ def call(image) {
           steps {
             container('trivy') {
               dir("${image}/"){
-			          sh 'trivy image ./image.tar --severity=CRITICAL,HIGH,MEDIUM --exit-code=1 -f json'
+			          sh 'trivy image --severity=CRITICAL,HIGH,MEDIUM --exit-code=1 -f json ./image.tar'
               }
 	          }
           }
