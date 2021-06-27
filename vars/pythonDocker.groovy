@@ -49,17 +49,26 @@ def call(image) {
 	          }
           }
         }
-        stage('Lint Image') {
+        stage('Lint Check Image') {
           when { changeset "${image}/**"}
           steps {
             container('dockle') {
               dir("${image}/"){
-			          sh 'dockle --input ./image.tar -f json -o results.json'
+			          sh 'dockle --input ./image.tar -f json'
               }
 	          }
           }
         }
-
+        stage('Vulnerability Check Image') {
+          when { changeset "${image}/**"}
+          steps {
+            container('trivy') {
+              dir("${image}/"){
+			          sh 'trivy image ./image.tar'
+              }
+	          }
+          }
+        }
     }
   }
 }
