@@ -25,7 +25,7 @@ spec:
     image: docker.io/goodwithtech/dockle:v0.3.15
     imagePullPolicy: IfNotPresent
     command:
-    - /busybox/cat
+    - /cat
     tty: true 
 
   - name: kaniko
@@ -98,7 +98,26 @@ spec:
                 }
             }
         }
-
+        stage('Find Vulnerabilities Image') {
+            when { changeset "${image}/**"}
+            steps {
+                container('trivy') {
+                  dir("${image}/"){
+			sh '/trivy image --exit-code 1 --severity CRITICAL,HIGH python:3.4-alpine'
+                  }
+                }
+            }
+        }
+        stage('Push Image') {
+            when { changeset "${image}/**"}
+            steps {
+                container('kaniko') {
+                  dir("${image}/"){
+			sh '/kaniko/executor -f ./Dockerfile --cache=true --context=./ --destination=${REGISTRY}/${REPOSITORY}/${IMAGE}'
+                  }
+                }
+            }
+        }
     }
   }
 }
