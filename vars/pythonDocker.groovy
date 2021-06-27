@@ -17,9 +17,40 @@ def call(image) {
             container('python') {
 		          dir("${image}/"){
         		    sh 'pip install pytest'
-        		    sh 'pytest'
+        		    sh 'pytest --with-xunit --xunit-file=pyunit.xml --cover-xml --cover-xml-file=cov.xml tests/*.py || true'
+                step([$class: 'CoberturaPublisher', 
+                        coberturaReportFile: "cov.xml",
+                        onlyStable: false,
+                        failNoReports: true,
+                        failUnhealthy: false,
+                        failUnstable: false,
+                        autoUpdateHealth: true,
+                        autoUpdateStability: true,
+                        zoomCoverageChart: true,
+                        maxNumberOfBuilds: 10,
+                        lineCoverageTargets: '80, 80, 80',
+                        conditionalCoverageTargets: '80, 80, 80',
+                        classCoverageTargets: '80, 80, 80',
+                        fileCoverageTargets: '80, 80, 80',
+                    ])
+                junit "pyunit.xml"
 		          }
 		        }
+          }
+        }
+        stage('python Static code check') {
+          when { changeset "${image}/**"}
+          steps {
+            container('python') {
+		          dir("${image}/"){
+        	      sh 'pip install pylint'
+                sh 'find . -name \\*.py | xargs pylint -f parseable | tee pylint.log'
+                recordIssues(
+                        tool: pyLint(pattern: 'pylint.log'),
+                        unstableTotalHigh: 100,
+                )
+              }
+	          }
           }
         }
         stage('python Security Test') {
