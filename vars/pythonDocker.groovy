@@ -6,46 +6,7 @@ def call(image) {
      kubernetes {
       label 'mypython'
       defaultContainer 'jnlp'
-      yaml """
-apiVersion: v1
-kind: Pod
-spec:
-  containers:
-  - name: python
-    image: docker.io/python:3.7-slim-buster
-    imagePullPolicy: IfNotPresent
-    command:
-    - /cat
-    tty: true
-    volumeMounts:
-    - mountPath: '/opt/app/shared'
-      name: sharedvolume
-
-  - name: dockle
-    image: docker.io/goodwithtech/dockle:v0.3.15
-    imagePullPolicy: IfNotPresent
-    command:
-    - /cat
-    tty: true 
-
-  - name: kaniko
-    image: gcr.io/kaniko-project/executor:v1.6.0
-    imagePullPolicy: IfNotPresent
-    command:
-    - /busybox/cat
-    tty: true
-
-  - name: trivy
-    image: docker.io/aquasec/trivy:0.18.3
-    imagePullPolicy: IfNotPresent
-    command:
-    - /cat
-    tty: true
-
-  volumes:
-  - name: sharedvolume
-    emptyDir: {}
-"""
+      yamlFile 'pythonDocker.yaml'
       }
     }
 
