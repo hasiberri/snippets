@@ -1,2 +1,2 @@
-# This is an example of staging full again again
+# This is an example of staging full again
 
