@@ -44,7 +44,7 @@ def call(image) {
           steps {
             container('kaniko') {
               dir("${image}/"){
-			          sh '/kaniko/executor -f Dockerfile --context=./ --tarPath=./ --destination=image.tar --no-push'
+			          sh '/kaniko/executor -f Dockerfile --context=./ --tarPath=./image.tar --destination=image.tar --no-push'
               }
 	          }
           }
