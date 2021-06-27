@@ -54,7 +54,7 @@ def call(image) {
           steps {
             container('dockle') {
               dir("${image}/"){
-			          sh 'dockle --input ./image.tar'
+			          sh 'dockle --input ./image.tar -f json -o results.json'
               }
 	          }
           }
