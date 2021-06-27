@@ -54,7 +54,7 @@ def call(image) {
           steps {
             container('dockle') {
               dir("${image}/"){
-			          sh '/dockle ${image}'
+			          sh 'dockle ${image}'
               }
 	          }
           }
