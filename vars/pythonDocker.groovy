@@ -17,7 +17,7 @@ def call(image) {
             container('python') {
 		          dir("${image}/"){
         		    sh 'pip install pytest'
-        		    sh 'pytest'
+        		    sh 'pytest --json-report --json-report-file none'
 		          }
 		        }
           }
