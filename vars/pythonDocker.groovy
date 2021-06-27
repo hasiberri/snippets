@@ -6,7 +6,7 @@ def call(image) {
      kubernetes {
       inheritFrom 'mypython'
       defaultContainer 'jnlp'
-      yamlFile 'pythonDocker.yaml'
+      yamlFile 'vars/pythonDocker.yaml'
       }
     }
 
@@ -39,7 +39,7 @@ def call(image) {
 	          }
           }
         }
-        stage('Build Image') {
+        stage('Image Build') {
           when { changeset "${image}/**"}
           steps {
             container('kaniko') {
@@ -49,7 +49,7 @@ def call(image) {
 	          }
           }
         }
-        stage('Lint Check Image') {
+        stage('Image Lint Check') {
           when { changeset "${image}/**"}
           steps {
             container('dockle') {
@@ -59,7 +59,7 @@ def call(image) {
 	          }
           }
         }
-        stage('Vulnerability Check Image') {
+        stage('Image Vulnerability Check') {
           when { changeset "${image}/**"}
           steps {
             container('trivy') {
