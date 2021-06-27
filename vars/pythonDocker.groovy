@@ -12,19 +12,35 @@ kind: Pod
 spec:
   containers:
   - name: python
-    image: python:3
+    image: python:3.7-slim-buster
     command:
     - cat
     tty: true
     volumeMounts:
     - mountPath: '/opt/app/shared'
-      name: sharedvolume  
+      name: sharedvolume
+
+  - name: dockle
+    image: docker.io/goodwithtech/dockle:v0.3.15
+    imagePullPolicy: Always
+    command:
+    - /busybox/cat
+    tty: true 
+
   - name: kaniko
-    image: gcr.io/kaniko-project/executor:debug
+    image: gcr.io/kaniko-project/executor:1.6.0
     imagePullPolicy: Always
     command:
     - /busybox/cat
     tty: true
+
+  - name: trivy
+    image: docker.io/aquasec/trivy:0.18.3
+    imagePullPolicy: Always
+    command:
+    - /busybox/cat
+    tty: true
+
   volumes:
   - name: sharedvolume
     emptyDir: {}
@@ -33,7 +49,7 @@ spec:
     }
 
     stages {
-        stage('Unit Test') {
+        stage('python Unit Test') {
             when { changeset "${image}/**"}
             steps {
                 container('python') {
@@ -44,7 +60,7 @@ spec:
 		}
             }
         }
-        stage('Security Test') {
+        stage('python Security Test') {
             when { changeset "${image}/**"}
             steps {
                 container('python') {
@@ -66,22 +82,22 @@ spec:
             steps {
                 container('kaniko') {
                   dir("${image}/"){
-			sh '/kaniko/executor -f ./Dockerfile --context=./ --no-push'
+			sh '/kaniko/executor -f ./Dockerfile --cache=true --context=./ --destination=${image} --no-push'
                   }
                 }
             }
         }
-        stage('Push Image') {
+        stage('Lint Image') {
             when { changeset "${image}/**"}
             steps {
-                container('kaniko') {
+                container('dockle') {
                   dir("${image}/"){
-                   	sh 'echo "pushing"'
+			sh '/dockle ${image}'
                   }
-		}      
+                }
             }
-
         }
+
     }
   }
 }
