@@ -12,10 +12,10 @@ kind: Pod
 spec:
   containers:
   - name: python
-    image: python:3.7-slim-buster
+    image: docker.io/python:3.7-slim-buster
     imagePullPolicy: IfNotPresent
     command:
-    - cat
+    - /cat
     tty: true
     volumeMounts:
     - mountPath: '/opt/app/shared'
@@ -39,7 +39,7 @@ spec:
     image: docker.io/aquasec/trivy:0.18.3
     imagePullPolicy: IfNotPresent
     command:
-    - /busybox/cat
+    - /cat
     tty: true
 
   volumes:
@@ -98,26 +98,7 @@ spec:
                 }
             }
         }
-        stage('Find Vulnerabilities Image') {
-            when { changeset "${image}/**"}
-            steps {
-                container('trivy') {
-                  dir("${image}/"){
-			sh '/trivy image --exit-code 1 --severity CRITICAL,HIGH python:3.4-alpine'
-                  }
-                }
-            }
-        }
-        stage('Push Image') {
-            when { changeset "${image}/**"}
-            steps {
-                container('kaniko') {
-                  dir("${image}/"){
-			sh '/kaniko/executor -f ./Dockerfile --cache=true --context=./ --destination=${REGISTRY}/${REPOSITORY}/${IMAGE}'
-                  }
-                }
-            }
-        }
+
     }
   }
 }
