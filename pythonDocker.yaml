@@ -23,7 +23,7 @@ spec:
     image: gcr.io/kaniko-project/executor:v1.6.0
     imagePullPolicy: IfNotPresent
     command:
-    - /busybox/cat
+    - cat
     tty: true
 
   - name: trivy
