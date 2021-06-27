@@ -54,7 +54,7 @@ def call(image) {
           steps {
             container('dockle') {
               dir("${image}/"){
-			          sh 'dockle --input ./image.tar -f json'
+			          sh 'dockle --input ./image.tar -f json --exit-code 1'
               }
 	          }
           }
@@ -64,7 +64,7 @@ def call(image) {
           steps {
             container('trivy') {
               dir("${image}/"){
-			          sh 'trivy image ./image.tar'
+			          sh 'trivy image ./image.tar --severity=CRITICAL,HIGH,MEDIUM --exit-code=1 -f json'
               }
 	          }
           }
